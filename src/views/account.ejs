@@ -1,7 +1,7 @@
 <%- include('./partials/header') %> 
 <%- include('./partials/nav') %> 
           <div class="col-sm-6">
-            <h1>Edit Akun</h1>
+            <h1>Editar Conta</h1>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -18,10 +18,10 @@
         <% }) %> 
         <% } %> 
         <% if(typeof locals.user != 'undefined' && locals.user != 'superadmin@email.com') { %>
-        <!-- Ganti Email -->
+        <!-- Change Email -->
         <div class="card card-default">
           <div class="card-header">
-            <h3 class="card-title">Ganti Email</h3>
+            <h3 class="card-title">Mudar Email</h3>
           </div>
           <!-- /.card-header -->
           <!-- form start -->
@@ -31,32 +31,32 @@
               <input type="hidden" name="matchPass" required value="<%= usr.matchPass || usr.password %>"/>
               <input type="hidden" name="id" required value="<%= usr.id %>"/>
               <div class="form-group">
-                <label for="oldEmail">Email Sekarang : </label>
+                <label for="oldEmail">Email Antigo : </label>
                 <%= usr.oldEmail || usr.email %>
               </div>
               <div class="form-group">
-                <label for="email">Email Baru</label>
-                <input type="email" name="email" class="form-control" placeholder="Email Baru" required />
+                <label for="email">Novo Email</label>
+                <input type="email" name="email" class="form-control" required />
               </div>
               <div class="form-group">
-                <label for="password">Kata Sandi</label>
-                <input type="password" name="password" class="form-control" placeholder="Kata Sandi" required />
+                <label for="password">Senha</label>
+                <input type="password" name="password" class="form-control" required />
               </div>
             </div>
             <!-- /.card-body -->
 
             <div class="card-footer">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary">Enviar</button>
             </div>
           </form>
         </div>
         <!-- /.card -->
         <% } %> 
         
-        <!-- Ganti Kata Sandi -->
+        <!-- Change Password -->
         <div class="card card-default">
           <div class="card-header">
-            <h3 class="card-title">Ganti Kata Sandi</h3>
+            <h3 class="card-title">Mudar Senha</h3>
           </div>
           <!-- /.card-header -->
           <!-- form start -->
@@ -65,32 +65,32 @@
               <input type="hidden" name="matchPass" required value="<%= usr.matchPass || usr.password %>"/>
               <input type="hidden" name="id" required value="<%= usr.id %>"/>
               <div class="form-group">
-                <label for="oldPassword">Kata Sandi Lama</label>
-                <input type="password" name="oldPassword" class="form-control" placeholder="Kata Sandi Lama" required />
+                <label for="oldPassword">Senha Antiga</label>
+                <input type="password" name="oldPassword" class="form-control" required />
               </div>
               <div class="form-group">
-                <label for="password">Kata Sandi Baru</label>
-                <input type="password" name="password" class="form-control" placeholder="Kata Sandi Baru" required />
+                <label for="password">Nova Senha</label>
+                <input type="password" name="password" class="form-control" required />
               </div>
               <div class="form-group">
-                <label for="confirmPassword">Konfirmasi Kata Sandi Baru</label>
-                <input type="password" name="confirmPassword" class="form-control" placeholder="Konfirmasi Kata Sandi Baru" required />
+                <label for="confirmPassword">Confirmação de Nova Senha</label>
+                <input type="password" name="confirmPassword" class="form-control" required />
               </div>
             </div>
             <!-- /.card-body -->
 
             <div class="card-footer">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary">Enviar</button>
             </div>
           </form>
         </div>
         <!-- /.card -->
 
         <% if(typeof locals.user != 'undefined' && locals.user != 'superadmin@email.com') { %>
-        <!-- Ganti Role -->
+        <!-- Change Roles -->
         <div class="card card-default">
           <div class="card-header">
-            <h3 class="card-title">Ganti Role</h3>
+            <h3 class="card-title">Mudar Cargo</h3>
           </div>
           <!-- /.card-header -->
           <!-- form start -->
@@ -101,22 +101,22 @@
               <input type="hidden" name="matchPass" required value="<%= usr.matchPass || usr.password %>"/>
               <input type="hidden" name="id" required value="<%= usr.id %>"/>
               <div class="form-group">
-                <label for="oldEmail">Role Sekarang : </label>
+                <label for="oldEmail">Cargo Atual : </label>
                 <%= usr.oldRole || usr.role %>
               </div>
               <div class="form-group">
-                <label for="oldEmail">Ganti Role Ke : </label>
+                <label for="oldEmail">Mudar Cargo Para : </label>
                 user
               </div>
               <div class="form-group">
-                <label for="password">Kata Sandi</label>
-                <input type="password" name="password" class="form-control" placeholder="Kata Sandi" required />
+                <label for="password">Senha</label>
+                <input type="password" name="password" class="form-control" required />
               </div>
             </div>
             <!-- /.card-body -->
 
             <div class="card-footer">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary">Enviar</button>
             </div>
           </form>
         </div>

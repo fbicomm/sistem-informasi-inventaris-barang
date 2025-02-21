@@ -1,14 +1,14 @@
 <%- include('./partials/header') %> 
 <%- include('./partials/nav') %> 
           <div class="col-sm-6">
-            <h1>Kelola Pengguna</h1>
+            <h1>Gerenciar Usuários</h1>
           </div>
           <div class="col-sm-6">
             <div id="bt" class="float-sm-right">
               <div class="dt-buttons btn-group flex-wrap">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add">
-                  <i class="fas fa-plus"></i>
-                  Tambah Pengguna
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add">
+                  <i class="fa-solid fa-plus"></i>
+                  Adicionar Usuário
                 </button>
               </div>
             </div>
@@ -24,7 +24,7 @@
           <div class="col-12">
             <div class="alert alert-info alert-dismissible">
               <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-              Info: kata sandi untuk pengguna baru dan reset kata sandi adalah "password"
+              Informação: Senha resetada é "password"
             </div>
             <% if(typeof errors != 'undefined') { %>
             <% errors.forEach(error => { %> 
@@ -41,18 +41,14 @@
               </div>
             <% } %> 
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Tabel Kelola Pengguna</h3>
-              </div>
-              <!-- /.card-header -->
               <div class="card-body">
                 <table id="user" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>No</th>
+                      <th>ID</th>
                       <th>Email</th>
-                      <th>Role</th>
-                      <th>Aksi</th>
+                      <th>Cargo</th>
+                      <th>Ações</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -63,14 +59,14 @@
                       <td><%= element.role %></td>
                       <td>
                         <% if(element.role != 'superadmin') { %>
-                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#edit<%= element.id %>">
-                          <i class="fas fa-edit"></i>
+                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#edit<%= element.id %>">
+                          <i class="fa-solid fa-edit"></i>
                         </button>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete<%= element.id %>">
-                          <i class="fas fa-trash-alt"></i>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete<%= element.id %>">
+                          <i class="fa-solid fa-trash-alt"></i>
                         </button>
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#resetpassword<%= element.id %>">
-                          <i class="fas fa-undo"></i>
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#resetpassword<%= element.id %>">
+                          <i class="fa-solid fa-undo"></i>
                         </button>
                         <% } %> 
                       </td>
@@ -82,30 +78,30 @@
                         <div class="modal-content">
                           <!-- Modal Header -->
                           <div class="modal-header">
-                            <h4 class="modal-title">Edit Pengguna</h4>
+                            <h4 class="modal-title">Editar Usuário</h4>
                             <button type="button" class="close" onclick="$('#edit<%= element.id %>').modal('hide');">&times;</button>
                           </div>
                           <!-- Modal body -->
-                          <form action="/users/<%= element.id %>?_method=put" method="post">
+                          <form action="/users/update/<%= element.id %>?_method=put" method="post">
                             <div class="modal-body">
                               <input type="hidden" name="oldEmail" required value="<%= element.oldEmail || element.email %>"/>
                               <input type="hidden" name="id" required value="<%= element.id %>"/>
                               <input type="hidden" name="password" required value="<%= element.password %>"/>
                               <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" name="email" class="form-control" placeholder="Email" required value="<%= element.email %>" />
+                                <input type="email" name="email" class="form-control" required value="<%= element.email %>" />
                               </div>
                               <div class="form-group">
-                                <label for="role">Pilih Role</label>
-                                <select class="form-control select2bs4" id="role<%= element.id %>" name="role" required>
+                                <label for="role">Cargo</label>
+                                <select class="form-control select2bs5" id="role<%= element.id %>" name="role" required>
                                   <option value="user">User</option>
                                   <option value="superadmin">Super Admin</option>
                                 </select>
                               </div>
                             </div>
                             <div class="modal-footer">
-                              <button type="submit" class="btn btn-primary">Simpan</button>
-                              <button type="button" class="btn btn-secondary" onclick="$('#edit<%= element.id %>').modal('hide');">Tutup</button>
+                              <button type="submit" class="btn btn-primary">Salvar</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#edit<%= element.id %>').modal('hide');">Cancelar</button>
                             </div>
                           </form>
                         </div>
@@ -118,17 +114,17 @@
                         <div class="modal-content">
                           <!-- Modal Header-->
                           <div class="modal-header">
-                            <h4 class="modal-title">Hapus Pengguna</h4>
+                            <h4 class="modal-title">Deletar Usuário</h4>
                             <button type="button" class="close" onclick="$('#delete<%= element.id %>').modal('hide');">&times;</button>
                           </div>
                           <!-- Modal body-->
                           <form action="/users/delete/<%= element.id %>" method="post">
                             <div class="modal-body">
-                              Apakah Anda yakin ingin menghapus pengguna <%= element.email %>?
+                              Você tem certeza que deseja deletar o usuário <%= element.email %>?
                             </div>
                             <div class="modal-footer">
-                              <button type="submit" class="btn btn-primary">Ya</button>
-                              <button type="button" class="btn btn-secondary" onclick="$('#delete<%= element.id %>').modal('hide');">Batal</button>
+                              <button type="submit" class="btn btn-danger">Sim</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#delete<%= element.id %>').modal('hide');">Cancelar</button>
                             </div>
                           </form>
                         </div>
@@ -141,17 +137,17 @@
                         <div class="modal-content">
                           <!-- Modal Header-->
                           <div class="modal-header">
-                            <h4 class="modal-title">Reset Kata Sandi</h4>
+                            <h4 class="modal-title">Reset Password</h4>
                             <button type="button" class="close" onclick="$('#resetpassword<%= element.id %>').modal('hide');">&times;</button>
                           </div>
                           <!-- Modal body-->
                           <form action="/users/resetpassword/<%= element.id %>" method="post">
                             <div class="modal-body">
-                              Apakah Anda yakin ingin mereset kata sandi pengguna <%= element.email %>?
+                              Você tem certeza que deseja resetar a senha do usuário <%= element.email %>?
                             </div>
                             <div class="modal-footer">
-                              <button type="submit" class="btn btn-primary">Ya</button>
-                              <button type="button" class="btn btn-secondary" onclick="$('#resetpassword<%= element.id %>').modal('hide');">Batal</button>
+                              <button type="submit" class="btn btn-danger">Sim</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#resetpassword<%= element.id %>').modal('hide');">Cancelar</button>
                             </div>
                           </form>
                         </div>
@@ -179,28 +175,31 @@
         <div class="modal-content">
           <!-- Modal Header -->
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Pengguna</h4>
+            <h4 class="modal-title">Adicionar Usuário</h4>
             <button type="button" class="close" onclick="$('#add').modal('hide');">&times;</button>
           </div>
           <!-- Modal body -->
           <form action="/users" method="post">
             <div class="modal-body">
-              <input type="hidden" name="password" required value="password"/>
               <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" name="email" class="form-control" placeholder="Email" required />
+                <input type="email" name="email" class="form-control" required />
               </div>
               <div class="form-group">
-                <label for="role">Pilih Role</label>
-                <select class="form-control select2bs4" id="role" name="role" required>
+                <label for="password">Senha</label>
+                <input type="password" name="password" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label for="role">Cargo</label>
+                <select class="form-control select2bs5" id="role" name="role" required>
                   <option value="user">User</option>
                   <option value="superadmin">Super Admin</option>
                 </select>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Simpan</button>
-              <button type="button" class="btn btn-secondary" onclick="$('#add').modal('hide');">Tutup</button>
+              <button type="submit" class="btn btn-primary">Salvar</button>
+              <button type="button" class="btn btn-secondary" onclick="$('#add').modal('hide');">Cancelar</button>
             </div>
           </form>
         </div>

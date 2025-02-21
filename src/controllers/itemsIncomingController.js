@@ -1,27 +1,27 @@
 const moment = require('moment');
-const stok = require('../queries/stockBarangQuery');
-const bmasuk = require('../queries/barangMasukQuery');
+const stockItemsQuery = require('../queries/stockItemsQuery');
+const itemsIncomingQuery = require('../queries/itemsIncomingQuery');
 
-const getBarangMasuk = async (req, res) => {
+const getitemsIncoming = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const barangMasuk = await bmasuk.getBarangM();
-    const barang = await stok.getBarang();
-    res.render('barangMasuk', {
+    const itemsIncoming = await itemsIncomingQuery.getitemsIncoming();
+    const items = await stockItemsQuery.getItems();
+    res.render('itemsIncoming', {
       user: req.session.user.email,
-      title: 'Barang Masuk',
-      brgm: barangMasuk,
+      title: 'Entrada de Item',
+      itemsi: itemsIncoming,
       moment,
-      brg: barang,
+      items: items,
     });
   } else if (req.session.user && req.session.user.role === 'user') {
-    const barangMasuk = await bmasuk.getBarangM();
-    const barang = await stok.getBarang();
-    res.render('barangMasuk', {
+    const itemsIncoming = await itemsIncomingQuery.getitemsIncoming();
+    const items = await stockItemsQuery.getItems();
+    res.render('itemsIncoming', {
       us: req.session.user.email,
-      title: 'Barang Masuk',
-      brgm: barangMasuk,
+      title: 'Entrada de Item',
+      itemsi: itemsIncoming,
       moment,
-      brg: barang,
+      items: items,
     });
   } else {
     res.status(401);
@@ -29,101 +29,100 @@ const getBarangMasuk = async (req, res) => {
   }
 };
 
-const addBarangMasuk = async (req, res) => {
+const additemsIncoming = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const idbarang = req.body.barang;
-    const { keterangan } = req.body;
-    const { qty } = req.body;
-    const namabarangMasuk = await stok.getNama(idbarang);
-    const penginput = req.session.user.email;
-    const kodebarangMasuk = await stok.getKode(idbarang);
+    const iditems = req.body.items;
+    const { information } = req.body;
+    const { amount } = req.body;
+    const nameitemsIncoming = await stockItemsQuery.getName(iditems);
+    const input = req.session.user.email;
+    const codeitemsIncoming = await stockItemsQuery.getCode(iditems);
 
-    const stock = await stok.getStock(idbarang);
-    const newStock = parseInt(stock, 10) + parseInt(qty, 10);
+    const stockk = await stockItemsQuery.getStock(iditems);
+    const newStock = parseInt(stockk, 10) + parseInt(amount, 10);
 
-    await stok.updateStock(newStock, idbarang);
-    await bmasuk.addBarangMasuk(
-      idbarang,
-      keterangan,
-      qty,
-      namabarangMasuk,
-      penginput,
-      kodebarangMasuk,
+    await stockItemsQuery.updateStock(newStock, iditems);
+    await itemsIncomingQuery.additemsIncoming(
+      iditems,
+      information,
+      amount,
+      nameitemsIncoming,
+      input,
+      codeitemsIncoming,
     );
 
-    res.redirect('/barangmasuk');
+    res.redirect('/itemsIncoming');
   } else if (req.session.user && req.session.user.role === 'user') {
-    const idbarang = req.body.barang;
-    const { keterangan } = req.body;
-    const { qty } = req.body;
-    const namabarangMasuk = await stok.getNama(idbarang);
-    const penginput = req.session.user.email;
-    const kodebarangMasuk = await stok.getKode(idbarang);
+    const iditems = req.body.items;
+    const { information } = req.body;
+    const { amount } = req.body;
+    const nameitemsIncoming = await stockItemsQuery.getName(iditems);
+    const input = req.session.user.email;
+    const codeitemsIncoming = await stockItemsQuery.getCode(iditems);
 
-    const stock = await stok.getStock(idbarang);
-    const newStock = parseInt(stock, 10) + parseInt(qty, 10);
+    const stockk = await stockItemsQuery.getStock(iditems);
+    const newStock = parseInt(stockk, 10) + parseInt(amount, 10);
 
-    await stok.updateStock(newStock, idbarang);
-    await bmasuk.addBarangMasuk(
-      idbarang,
-      keterangan,
-      qty,
-      namabarangMasuk,
-      penginput,
-      kodebarangMasuk,
+    await stockItemsQuery.updateStock(newStock, iditems);
+    await itemsIncomingQuery.additemsIncoming(
+      iditems,
+      information,
+      amount,
+      nameitemsIncoming,
+      input,
+      codeitemsIncoming,
     );
 
-    res.redirect('/barangmasuk');
+    res.redirect('/itemsIncoming');
   } else {
     res.status(401);
     res.render('401', { title: '401 Error' });
   }
 };
 
-const updateBarangMasuk = async (req, res) => {
+const updateitemsIncoming = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const { idbarang } = req.body;
-    const { keterangan } = req.body;
-    const { qty } = req.body;
-    const { idmasuk } = req.body;
+    const { iditems } = req.body;
+    const { information } = req.body;
+    const { amount } = req.body;
+    const { idincoming } = req.body;
 
-    const stockk = await stok.getStock(idbarang);
+    const stockk = await stockItemsQuery.getStock(iditems);
     if (stockk !== 'undefined') {
-      const currentQtyy = await bmasuk.getQty(idmasuk);
+      const currentamountd = await itemsIncomingQuery.getAmount(idincoming);
 
-      const qtyy = parseInt(qty, 10);
-      const currentQty = parseInt(currentQtyy, 10);
+      const amount = parseInt(amount, 10);
+      const currentamount = parseInt(currentamountd, 10);
 
-      if (qtyy > currentQty) {
-        const selisih = qtyy - currentQty;
-        const tambahin = stockk + selisih;
-        await stok.updateStock(tambahin, idbarang);
-        await bmasuk.updateBarangMasuk(keterangan, qty, idmasuk);
-        res.redirect('/barangmasuk');
+      if (amount > currentamount) {
+        const diff = amount - currentamount;
+        const tambahin = stockk + diff;
+        await stockItemsQuery.updateStock(tambahin, iditems);
+        await itemsIncomingQuery.updateitemsIncoming(information, amount, idincoming);
+        res.redirect('/itemsIncoming');
       } else {
-        const selisih = currentQty - qtyy;
-        const kurangin = stockk - selisih;
+        const diff = currentamount - amount;
+        const kurangin = stockk - diff;
         if (kurangin < 0) {
-          const barangMasuk = await bmasuk.getBarangM();
-          const barang = await stok.getBarang();
-          res.render('barangMasuk', {
+          const itemsIncoming = await itemsIncomingQuery.getitemsIncoming();
+          const items = await stockItemsQuery.getItems();
+          res.render('itemsIncoming', {
             user: req.session.user.email,
-            title: 'Barang Masuk',
-            brgm: barangMasuk,
+            title: 'Entrada de Item',
+            itemsi: itemsIncoming,
             moment,
-            deleteFail:
-              'Edit barang masuk gagal: mengurangi jumlah masuk barang ini akan mengakibatkan nilai stok barang menjadi negatif.',
-            brg: barang,
+            deleteFail: 'Editing incoming items failed: reducing the amount of incoming items will result in the items stock value becoming negative.',
+            items: items,
           });
         } else {
-          await stok.updateStock(kurangin, idbarang);
-          await bmasuk.updateBarangMasuk(keterangan, qty, idmasuk);
-          res.redirect('/barangmasuk');
+          await stockItemsQuery.updateStock(kurangin, iditems);
+          await itemsIncomingQuery.updateitemsIncoming(information, amount, idincoming);
+          res.redirect('/itemsIncoming');
         }
       }
     } else {
-      await bmasuk.updateBarangMasuk(keterangan, qty, idmasuk);
-      res.redirect('/barangmasuk');
+      await itemsIncomingQuery.updateitemsIncoming(information, amount, idincoming);
+      res.redirect('/itemsIncoming');
     }
   } else {
     res.status(401);
@@ -131,41 +130,40 @@ const updateBarangMasuk = async (req, res) => {
   }
 };
 
-const deleteBarangMasuk = async (req, res) => {
+const deleteitemsIncoming = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const { idbarang } = req.body;
-    const { qty } = req.body;
-    const { idmasuk } = req.body;
+    const { iditems } = req.body;
+    const { amount } = req.body;
+    const { idincoming } = req.body;
 
-    const stockk = await stok.getStock(idbarang);
+    const stockk = await stockItemsQuery.getStock(iditems);
     if (stockk !== 'undefined') {
-      const qtyy = parseInt(qty, 10);
-      const stock = parseInt(stockk, 10);
+      const amountd = parseInt(amount, 10);
+      const stockk = parseInt(stockk, 10);
 
-      const selisih = stock - qtyy;
+      const diff = stock - amountd;
 
-      if (selisih < 0) {
-        const barangMasuk = await bmasuk.getBarangM();
-        const barang = await stok.getBarang();
-        res.render('barangMasuk', {
+      if (diff < 0) {
+        const itemsIncoming = await itemsIncomingQuery.getitemsIncoming();
+        const items = await stockItemsQuery.getItems();
+        res.render('itemsIncoming', {
           user: req.session.user.email,
-          title: 'Barang Masuk',
-          brgm: barangMasuk,
+          title: 'Entrada de Item',
+          itemsi: itemsIncoming,
           moment,
-          deleteFail:
-            'Hapus barang masuk gagal: menghapus barang masuk ini akan mengakibatkan nilai stok barang menjadi negatif.',
-          brg: barang,
+          deleteFail: 'Delete incoming items failed: deleting incoming items will result in the item stock value becoming negative.',
+          items: items,
         });
       } else {
-        await stok.updateStock(selisih, idbarang);
-        await bmasuk.delBarangMasuk(idmasuk);
+        await stockItemsQuery.updateStock(diff, iditems);
+        await itemsIncomingQuery.delitemsIncoming(idincoming);
 
-        res.redirect('/barangmasuk');
+        res.redirect('/itemsIncoming');
       }
     } else {
-      await bmasuk.delBarangMasuk(idmasuk);
+      await itemsIncomingQuery.delitemsIncoming(idincoming);
 
-      res.redirect('/barangmasuk');
+      res.redirect('/itemsIncoming');
     }
   } else {
     res.status(401);
@@ -174,8 +172,8 @@ const deleteBarangMasuk = async (req, res) => {
 };
 
 module.exports = {
-  getBarangMasuk,
-  addBarangMasuk,
-  updateBarangMasuk,
-  deleteBarangMasuk,
+  getitemsIncoming,
+  additemsIncoming,
+  updateitemsIncoming,
+  deleteitemsIncoming,
 };

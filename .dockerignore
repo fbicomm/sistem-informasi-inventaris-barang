@@ -1,0 +1,12 @@
+node_modules
+Dockerfile
+.dockerignore
+.env
+.env.example
+.git
+.gitignore
+.eslintrc.json
+.vscode
+database
+README.md
+LICENSE

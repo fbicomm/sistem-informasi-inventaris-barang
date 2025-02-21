@@ -1,7 +1,17 @@
 <%- include('./partials/header') %> 
 <%- include('./partials/nav') %> 
           <div class="col-sm-6">
-            <h1>Log Aplikasi</h1>
+            <h1>Registros da Aplicação</h1>
+          </div>
+          <div class="col-sm-6">
+            <div id="bt" class="float-sm-right">
+              <div class="dt-buttons btn-group flex-wrap">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#clearLog">
+                  <i class="fa-solid fa-trash"></i>
+                  Limpar Registros
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -13,20 +23,16 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Tabel Log Aplikasi</h3>
-              </div>
-              <!-- /.card-header -->
               <div class="card-body">
                 <table id="log" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>No</th>
-                      <th>Tanggal & Waktu</th>
-                      <th>Pengguna</th>
-                      <th>Method</th>
-                      <th>Endpoint</th>
-                      <th>Status Code</th>
+                      <th>ID</th>
+                      <th>Data</th>
+                      <th>Usuário</th>
+                      <th>Método</th>
+                      <th>URL</th>
+                      <th>Código de Status</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -60,17 +66,17 @@
         <div class="modal-content">
           <!-- Modal Header-->
           <div class="modal-header">
-            <h4 class="modal-title">Bersihkan Log</h4>
+            <h4 class="modal-title">Limpar Registros</h4>
             <button type="button" class="close" onclick="$('#clearLog').modal('hide');">&times;</button>
           </div>
           <!-- Modal body-->
-          <form action="/log/delete/" method="post">
+          <form action="/log/clear/" method="post">
             <div class="modal-body">
-              Apakah Anda yakin ingin menghapus semua data log yang tersimpan ?
+              Você tem certeza que deseja deletar todos os registros salvos?
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Ya</button>
-              <button type="button" class="btn btn-secondary" onclick="$('#clearLog').modal('hide');">Batal</button>
+              <button type="submit" class="btn btn-danger">Sim</button>
+              <button type="button" class="btn btn-secondary" onclick="$('#clearLog').modal('hide');">Cancelar</button>
             </div>
           </form>
         </div>

@@ -1,0 +1,36 @@
+networks:
+  siib:
+    name: siib
+    enable_ipv6: true
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres
+    networks:
+      - siib
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: '1234'
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+  app:
+    build: 
+      dockerfile: ./Dockerfile
+      context: . 
+    container_name: app
+    env_file: ".env"
+    depends_on:
+      - postgres
+    networks:
+      - siib
+    ports:
+      - "8080:3000"
+    working_dir: /app
+    restart: unless-stopped
+
+volumes:
+  postgres:

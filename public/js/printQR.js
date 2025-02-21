@@ -7,7 +7,7 @@ function checkSizeValue(input) {
   }
 }
 
-function checkQtyValue(input) {
+function checkAmountValue(input) {
   const inputValue = input;
   if (inputValue.value <= inputValue.min) {
     inputValue.value = inputValue.min;
@@ -27,13 +27,13 @@ function ImagetoPrint(source, title) {
 
 function PrintImage(source, id, title) {
   const pagelink = 'about:blank';
-  const qty = $(`#qrQty${id}`).val();
+  const amount = $(`#qrAmount${id}`).val();
   const pixelToCentimeter = 37.7952755906;
   const width = $(`#qrWidth${id}`).val() * pixelToCentimeter;
   const height = $(`#qrHeight${id}`).val() * pixelToCentimeter;
   const pwa = window.open(pagelink, '_new');
   let img = '';
-  for (let i = 1; i <= qty; i += 1) {
+  for (let i = 1; i <= amount; i += 1) {
     img += `<img src='${source}' width='${width}' height='${height}' />`;
   }
   pwa.document.open();

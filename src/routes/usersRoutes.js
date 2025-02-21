@@ -7,7 +7,7 @@ const {
 
 router.get('/users', getUsers);
 router.post('/users', addUser);
-router.put('/users/:id', updateUser);
+router.put('/users/update/:id', updateUser);
 router.post('/users/delete/:id', deleteUser);
 router.post('/users/resetpassword/:id', resetPassword);
 

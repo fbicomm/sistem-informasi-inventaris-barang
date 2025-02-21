@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 $(() => {
-  $('#stokbarang')
+  $('#stockItems')
     .DataTable({
       responsive: true,
       // "lengthChange": false,
@@ -27,13 +27,13 @@ $(() => {
         // "colvis"
       ],
       initComplete() {
-        $('.buttons-print').html('<i class="fas fa-print"></i> Cetak ');
+        $('.buttons-print').html('<i class="fa-solid fa-print"></i> Imprimir');
       },
     })
     .buttons()
     .container()
     .appendTo('#bt');
-  $('#barangmasuk')
+  $('#itemsIncoming')
     .DataTable({
       responsive: true,
       // "lengthChange": false,
@@ -60,13 +60,13 @@ $(() => {
         // "colvis"
       ],
       initComplete() {
-        $('.buttons-print').html('<i class="fas fa-print"></i> Cetak ');
+        $('.buttons-print').html('<i class="fa-solid fa-print"></i> Imprimir');
       },
     })
     .buttons()
     .container()
     .appendTo('#bt');
-  $('#barangkeluar')
+  $('#itemsWithdrawal')
     .DataTable({
       responsive: true,
       // "lengthChange": false,
@@ -93,7 +93,7 @@ $(() => {
         // "colvis"
       ],
       initComplete() {
-        $('.buttons-print').html('<i class="fas fa-print"></i> Cetak ');
+        $('.buttons-print').html('<i class="fa-solid fa-print"></i> Imprimir');
       },
     })
     .buttons()
@@ -109,7 +109,7 @@ $(() => {
     // "lengthChange": false,
     autoWidth: false,
   });
-  $('#detailbarangmasuk').DataTable({
+  $('#detailItemsIncoming').DataTable({
     paging: true,
     lengthChange: false,
     searching: false,
@@ -118,7 +118,7 @@ $(() => {
     autoWidth: false,
     responsive: true,
   });
-  $('#detailbarangkeluar').DataTable({
+  $('#detailItemsWithdrawal').DataTable({
     paging: true,
     lengthChange: false,
     searching: false,

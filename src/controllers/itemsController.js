@@ -7,9 +7,9 @@ const multer = require('multer');
 const path = require('path');
 // const { createCanvas } = require("canvas");
 // const JsBarcode = require("jsbarcode");
-const stok = require('../queries/stockBarangQuery');
-const bmasuk = require('../queries/barangMasukQuery');
-const bkeluar = require('../queries/barangKeluarQuery');
+const stockItemsQuery = require('../queries/stockItemsQuery');
+const itemsIncomingQuery = require('../queries/itemsIncomingQuery');
+const itemsWithdrawalQuery = require('../queries/itemsWithdrawalQuery');
 
 // Multer
 const storage = multer.diskStorage({
@@ -29,20 +29,20 @@ const unlinkAsync = promisify(fs.unlink);
 // Canvas
 // const canvas = createCanvas();
 
-const getBarang = async (req, res) => {
+const getItems = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const barang = await stok.getBarang();
-    res.render('barang', {
+    const items = await stockItemsQuery.getItems();
+    res.render('items', {
       user: req.session.user.email,
-      title: 'Stok Barang',
-      brg: barang,
+      title: 'Items Stock ',
+      items: items,
     });
   } else if (req.session.user && req.session.user.role === 'user') {
-    const barang = await stok.getBarang();
-    res.render('barang', {
+    const items = await stockItemsQuery.getItems();
+    res.render('items', {
       us: req.session.user.email,
-      title: 'Stok Barang',
-      brg: barang,
+      title: 'Items Stock ',
+      items: items,
     });
   } else {
     res.status(401);
@@ -50,31 +50,31 @@ const getBarang = async (req, res) => {
   }
 };
 
-const getBarangDetail = async (req, res) => {
+const getItemsDetail = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const barang = await stok.getDetail(req.params.id);
-    const barangMasuk = await bmasuk.getDetailBarang(req.params.id);
-    const barangKeluar = await bkeluar.getDetailBarang(req.params.id);
+    const items = await stockItemsQuery.getDetail(req.params.id);
+    const itemsIncoming = await itemsIncomingQuery.getDetailItems(req.params.id);
+    const itemsWithdrawal = await itemsWithdrawalQuery.getDetailItems(req.params.id);
 
-    res.render('barangDetail', {
-      brg: barang,
+    res.render('itemsDetail', {
+      items: items,
       user: req.session.user.email,
-      title: 'Detail Barang',
-      brgm: barangMasuk,
-      brgk: barangKeluar,
+      title: 'Items Detail',
+      itemsi: itemsIncoming,
+      itemsw: itemsWithdrawal,
       moment,
     });
   } else if (req.session.user && req.session.user.role === 'user') {
-    const barang = await stok.getDetail(req.params.id);
-    const barangMasuk = await bmasuk.getDetailBarang(req.params.id);
-    const barangKeluar = await bkeluar.getDetailBarang(req.params.id);
+    const items = await stockItemsQuery.getDetail(req.params.id);
+    const itemsIncoming = await itemsIncomingQuery.getDetailItems(req.params.id);
+    const itemsWithdrawal = await itemsWithdrawalQuery.getDetailItems(req.params.id);
 
-    res.render('barangDetail', {
-      brg: barang,
+    res.render('itemsDetail', {
+      items: items,
       us: req.session.user.email,
-      title: 'Detail Barang',
-      brgm: barangMasuk,
-      brgk: barangKeluar,
+      title: 'Items Detail',
+      itemsi: itemsIncoming,
+      itemsw: itemsWithdrawal,
       moment,
     });
   } else {
@@ -83,26 +83,26 @@ const getBarangDetail = async (req, res) => {
   }
 };
 
-const addBarang = [
+const addItems = [
   upload.single('image'),
-  body('kodebarang').custom(async (value) => {
-    const dup = await stok.cekKode(value.toLowerCase());
+  body('codeitems').custom(async (value) => {
+    const dup = await stockItemsQuery.verifyCode(value.toLowerCase());
     if (dup) {
-      throw new Error('Tambah barang gagal: kode barang sudah ada.');
+      throw new Error('Add items failed: código already exists.');
     }
     return true;
   }),
-  body('namabarang').custom(async (value) => {
-    const duplicate = await stok.cekBarang(value.toLowerCase());
+  body('nameitems').custom(async (value) => {
+    const duplicate = await stockItemsQuery.verifyItems(value.toLowerCase());
     if (duplicate) {
-      throw new Error('Tambah barang gagal: nama barang sudah ada.');
+      throw new Error('Add items failed: nome already exists.');
     }
     return true;
   }),
   body('image').custom(async (value, { req }) => {
-    const maxSize = 1048576;
+    const maxSize = 10485760;
     if (req.file.size > maxSize) {
-      throw new Error('Tambah barang gagal: ukuran file melebihi batas 1MB.');
+      throw new Error('Add items failed: file size exceeds 10MB limit.');
     }
     return true;
   }),
@@ -117,36 +117,36 @@ const addBarang = [
           await unlinkAsync(imgPath);
         }
 
-        const barang = await stok.getBarang();
+        const items = await stockItemsQuery.getItems();
 
-        res.render('barang', {
-          title: 'Stok Barang',
+        res.render('items', {
+          title: 'Items Stock ',
           errors: errors.array(),
           user: req.session.user.email,
-          brg: barang,
+          items: items,
         });
       } else {
-        const { namabarang } = req.body;
-        const { deskripsi } = req.body;
+        const { nameitems } = req.body;
+        const { description } = req.body;
         const { stock } = req.body;
         const image = req.file.filename;
-        const penginput = req.session.user.email;
-        const { kodebarang } = req.body;
+        const input = req.session.user.email;
+        const { codeitems } = req.body;
 
-        await stok.addBarang(
-          namabarang,
-          deskripsi,
+        await stockItemsQuery.addItems(
+          nameitems,
+          description,
           stock,
           image,
-          penginput,
-          kodebarang,
+          input,
+          codeitems,
         );
 
-        // JsBarcode(canvas, kodebarang);
+        // JsBarcode(canvas, codeitems);
         // const buffer = canvas.toBuffer("image/png");
-        const writeImgPath = `./public/uploads/${kodebarang}.png`;
+        const writeImgPath = `./public/uploads/${codeitems}.png`;
         // fs.writeFileSync(writeImgPath, buffer);
-        QRCode.toFile(writeImgPath, kodebarang, (err) => {
+        QRCode.toFile(writeImgPath, codeitems, (err) => {
           if (err) {
             console.err(err);
             return false;
@@ -154,7 +154,7 @@ const addBarang = [
           return true;
         });
 
-        res.redirect('/barang');
+        res.redirect('/items');
       }
     } else if (req.session.user && req.session.user.role === 'user') {
       const errors = validationResult(req);
@@ -166,36 +166,36 @@ const addBarang = [
           await unlinkAsync(imgPath);
         }
 
-        const barang = await stok.getBarang();
+        const items = await stockItemsQuery.getItems();
 
-        res.render('barang', {
-          title: 'Stok Barang',
+        res.render('items', {
+          title: 'Items Stock ',
           errors: errors.array(),
           us: req.session.user.email,
-          brg: barang,
+          items: items,
         });
       } else {
-        const { namabarang } = req.body;
-        const { deskripsi } = req.body;
+        const { nameitems } = req.body;
+        const { description } = req.body;
         const { stock } = req.body;
         const image = req.file.filename;
-        const penginput = req.session.user.email;
-        const { kodebarang } = req.body;
+        const input = req.session.user.email;
+        const { codeitems } = req.body;
 
-        await stok.addBarang(
-          namabarang,
-          deskripsi,
+        await stockItemsQuery.addItems(
+          nameitems,
+          description,
           stock,
           image,
-          penginput,
-          kodebarang,
+          input,
+          codeitems,
         );
 
-        // JsBarcode(canvas, kodebarang);
+        // JsBarcode(canvas, codeitems);
         // const buffer = canvas.toBuffer("image/png");
-        const writeImgPath = `./public/uploads/${kodebarang}.png`;
+        const writeImgPath = `./public/uploads/${codeitems}.png`;
         // fs.writeFileSync(writeImgPath, buffer);
-        QRCode.toFile(writeImgPath, kodebarang, (err) => {
+        QRCode.toFile(writeImgPath, codeitems, (err) => {
           if (err) {
             console.err(err);
             return false;
@@ -203,7 +203,7 @@ const addBarang = [
           return true;
         });
 
-        res.redirect('/barang');
+        res.redirect('/items');
       }
     } else {
       res.status(401);
@@ -212,27 +212,27 @@ const addBarang = [
   },
 ];
 
-const updateBarang = [
+const updateItems = [
   upload.single('image'),
-  body('kodebarang').custom(async (value, { req }) => {
-    const dup = await stok.checkKodeDuplicate(value.toLowerCase());
-    if (value !== req.body.oldKode && dup) {
-      throw new Error('Edit barang gagal: kode barang sudah ada.');
+  body('codeitems').custom(async (value, { req }) => {
+    const dup = await stockItemsQuery.checkCodeDuplicate(value.toLowerCase());
+    if (value !== req.body.oldcode && dup) {
+      throw new Error('Edit items failed: código already exists.');
     }
     return true;
   }),
-  body('namabarang').custom(async (value, { req }) => {
-    const duplicate = await stok.checkDuplicate(value.toLowerCase());
+  body('nameitems').custom(async (value, { req }) => {
+    const duplicate = await stockItemsQuery.checkDuplicate(value.toLowerCase());
     if (value !== req.body.oldNama && duplicate) {
-      throw new Error('Edit barang gagal: nama barang sudah ada.');
+      throw new Error('Edit items failed: nome already exists.');
     }
     return true;
   }),
   body('image').custom(async (value, { req }) => {
-    const maxSize = 1048576;
+    const maxSize = 10485760;
     if (req.file) {
       if (req.file.size > maxSize) {
-        throw new Error('Edit barang gagal: ukuran file melebihi batas 1MB.');
+        throw new Error('Edit items failed: file size exceeds 10MB limit.');
       }
     }
     return true;
@@ -249,31 +249,31 @@ const updateBarang = [
             await unlinkAsync(imgPath);
           }
         }
-        const barang = await stok.getBarang();
+        const items = await stockItemsQuery.getItems();
 
-        res.render('barang', {
-          title: 'Stok Barang',
+        res.render('items', {
+          title: 'Items Stock ',
           errors: errors.array(),
-          brg: barang,
+          items: items,
           user: req.session.user.email,
         });
       } else if (req.file && req.file.filename) {
-        const { namabarang } = req.body;
-        const { deskripsi } = req.body;
+        const { nameitems } = req.body;
+        const { description } = req.body;
         const { stock } = req.body;
         const image = req.file.filename;
-        const { kodebarang } = req.body;
-        const { oldKode } = req.body;
-        const { idbarang } = req.body;
+        const { codeitems } = req.body;
+        const { oldcode } = req.body;
+        const { iditems } = req.body;
         const img = req.body.image;
 
-        await stok.updateBarang(
-          namabarang,
-          deskripsi,
+        await stockItemsQuery.updateItems(
+          nameitems,
+          description,
           stock,
           image,
-          kodebarang,
-          idbarang,
+          codeitems,
+          iditems,
         );
 
         const imgPath = `./public/uploads/${img}`;
@@ -281,17 +281,17 @@ const updateBarang = [
           await unlinkAsync(imgPath);
         }
 
-        if (kodebarang !== oldKode) {
-          const oldImgPath = `./public/uploads/${oldKode}.png`;
+        if (codeitems !== oldcode) {
+          const oldImgPath = `./public/uploads/${oldcode}.png`;
           if (fs.existsSync(oldImgPath)) {
             await unlinkAsync(oldImgPath);
           }
 
-          // JsBarcode(canvas, kodebarang);
+          // JsBarcode(canvas, codeitems);
           // const buffer = canvas.toBuffer("image/png");
-          const writeImgPath = `./public/uploads/${kodebarang}.png`;
+          const writeImgPath = `./public/uploads/${codeitems}.png`;
           // fs.writeFileSync(writeImgPath, buffer);
-          QRCode.toFile(writeImgPath, kodebarang, (err) => {
+          QRCode.toFile(writeImgPath, codeitems, (err) => {
             if (err) {
               console.err(err);
               return false;
@@ -300,36 +300,36 @@ const updateBarang = [
           });
         }
 
-        res.redirect('/barang');
+        res.redirect('/items');
       } else {
-        const { namabarang } = req.body;
-        const { deskripsi } = req.body;
+        const { nameitems } = req.body;
+        const { description } = req.body;
         const { stock } = req.body;
         const { image } = req.body;
-        const { kodebarang } = req.body;
-        const { oldKode } = req.body;
-        const { idbarang } = req.body;
+        const { codeitems } = req.body;
+        const { oldcode } = req.body;
+        const { iditems } = req.body;
 
-        await stok.updateBarang(
-          namabarang,
-          deskripsi,
+        await stockItemsQuery.updateItems(
+          nameitems,
+          description,
           stock,
           image,
-          kodebarang,
-          idbarang,
+          codeitems,
+          iditems,
         );
 
-        if (kodebarang !== oldKode) {
-          const oldImgPath = `./public/uploads/${oldKode}.png`;
+        if (codeitems !== oldcode) {
+          const oldImgPath = `./public/uploads/${oldcode}.png`;
           if (fs.existsSync(oldImgPath)) {
             await unlinkAsync(oldImgPath);
           }
 
-          // JsBarcode(canvas, kodebarang);
+          // JsBarcode(canvas, codeitems);
           // const buffer = canvas.toBuffer("image/png");
-          const writeImgPath = `./public/uploads/${kodebarang}.png`;
+          const writeImgPath = `./public/uploads/${codeitems}.png`;
           // fs.writeFileSync(writeImgPath, buffer);
-          QRCode.toFile(writeImgPath, kodebarang, (err) => {
+          QRCode.toFile(writeImgPath, codeitems, (err) => {
             if (err) {
               console.err(err);
               return false;
@@ -338,7 +338,7 @@ const updateBarang = [
           });
         }
 
-        res.redirect('/barang');
+        res.redirect('/items');
       }
     } else {
       res.status(401);
@@ -347,22 +347,22 @@ const updateBarang = [
   },
 ];
 
-const deleteBarang = async (req, res) => {
+const deleteItems = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const image = await stok.getImage(req.params.id);
-    const kode = await stok.getKode(req.params.id);
-    await stok.delBarang(req.params.id);
-    // await bmasuk.delBarangMasukId(req.params.id);
-    // await bkeluar.delBarangKeluarId(req.params.id);
+    const image = await stockItemsQuery.getImage(req.params.id);
+    const code = await stockItemsQuery.getCode(req.params.id);
+    await stockItemsQuery.delItems(req.params.id);
+    // await itemsIncomingQuery.delitemsIncomingId(req.params.id);
+    // await itemsWithdrawalQuery.delitemsWithdrawalId(req.params.id);
     const imgPath = `./public/uploads/${image}`;
     if (fs.existsSync(imgPath)) {
       await unlinkAsync(imgPath);
     }
-    const writeImgPath = `./public/uploads/${kode}.png`;
+    const writeImgPath = `./public/uploads/${code}.png`;
     if (fs.existsSync(writeImgPath)) {
       await unlinkAsync(writeImgPath);
     }
-    res.redirect('/barang');
+    res.redirect('/items');
   } else {
     res.status(401);
     res.render('401', { title: '401 Error' });
@@ -370,9 +370,9 @@ const deleteBarang = async (req, res) => {
 };
 
 module.exports = {
-  getBarang,
-  getBarangDetail,
-  addBarang,
-  updateBarang,
-  deleteBarang,
+  getItems,
+  getItemsDetail,
+  addItems,
+  updateItems,
+  deleteItems,
 };

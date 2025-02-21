@@ -1,27 +1,27 @@
 const moment = require('moment');
-const stok = require('../queries/stockBarangQuery');
-const bkeluar = require('../queries/barangKeluarQuery');
+const stockItemsQuery = require('../queries/stockItemsQuery');
+const itemsWithdrawalQuery = require('../queries/itemsWithdrawalQuery');
 
-const getBarangKeluar = async (req, res) => {
+const getitemsWithdrawal = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const barangKeluar = await bkeluar.getBarangK();
-    const barang = await stok.getBarang();
-    res.render('barangKeluar', {
+    const itemsWithdrawal = await itemsWithdrawalQuery.getitemsWithdrawal();
+    const items = await stockItemsQuery.getItems();
+    res.render('itemsWithdrawal', {
       user: req.session.user.email,
-      title: 'Barang Keluar',
-      brgk: barangKeluar,
+      title: 'Retirada de Item',
+      itemsw: itemsWithdrawal,
       moment,
-      brg: barang,
+      items: items,
     });
   } else if (req.session.user && req.session.user.role === 'user') {
-    const barangKeluar = await bkeluar.getBarangK();
-    const barang = await stok.getBarang();
-    res.render('barangKeluar', {
+    const itemsWithdrawal = await itemsWithdrawalQuery.getitemsWithdrawal();
+    const items = await stockItemsQuery.getItems();
+    res.render('itemsWithdrawal', {
       us: req.session.user.email,
-      title: 'Barang Keluar',
-      brgk: barangKeluar,
+      title: 'Retirada de Item',
+      itemsw: itemsWithdrawal,
       moment,
-      brg: barang,
+      items: items,
     });
   } else {
     res.status(401);
@@ -29,76 +29,76 @@ const getBarangKeluar = async (req, res) => {
   }
 };
 
-const addBarangKeluar = async (req, res) => {
+const additemsWithdrawal = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const idbarang = req.body.barang;
-    const { penerima } = req.body;
-    const { qty } = req.body;
-    const namabarangKeluar = await stok.getNama(idbarang);
-    const penginput = req.session.user.email;
-    const kodebarangKeluar = await stok.getKode(idbarang);
+    const iditems = req.body.items;
+    const { receiver } = req.body;
+    const { amount } = req.body;
+    const nameitemsWithdrawal = await stockItemsQuery.getName(iditems);
+    const input = req.session.user.email;
+    const codeitemsWithdrawal = await stockItemsQuery.getCode(iditems);
 
-    const stock = await stok.getStock(idbarang);
-    const newStock = parseInt(stock, 10) - parseInt(qty, 10);
+    const stockk = await stockItemsQuery.getStock(iditems);
+    const newStock = parseInt(stockk, 10) - parseInt(amount, 10);
 
     if (newStock < 0) {
-      const barangKeluar = await bkeluar.getBarangK();
-      const barang = await stok.getBarang();
-      res.render('barangKeluar', {
+      const itemsWithdrawal = await itemsWithdrawalQuery.getitemsWithdrawal();
+      const items = await stockItemsQuery.getItems();
+      res.render('itemsWithdrawal', {
         user: req.session.user.email,
-        title: 'Barang Keluar',
-        brgk: barangKeluar,
+        title: 'Retirada de Item',
+        itemsw: itemsWithdrawal,
         moment,
-        error: 'Tambah barang keluar gagal: stok barang tidak mencukupi.',
-        brg: barang,
+        error: 'Add retirada de item failed: insufficient stock items.',
+        items: items,
       });
     } else {
-      await stok.updateStock(newStock, idbarang);
-      await bkeluar.addBarangKeluar(
-        idbarang,
-        penerima,
-        qty,
-        namabarangKeluar,
-        penginput,
-        kodebarangKeluar,
+      await stockItemsQuery.updateStock(newStock, iditems);
+      await itemsWithdrawalQuery.additemsWithdrawal(
+        iditems,
+        receiver,
+        amount,
+        nameitemsWithdrawal,
+        input,
+        codeitemsWithdrawal,
       );
 
-      res.redirect('/barangkeluar');
+      res.redirect('/itemsWithdrawal');
     }
   } else if (req.session.user && req.session.user.role === 'user') {
-    const idbarang = req.body.barang;
-    const { penerima } = req.body;
-    const { qty } = req.body;
-    const namabarangKeluar = await stok.getNama(idbarang);
-    const penginput = req.session.user.email;
-    const kodebarangKeluar = await stok.getKode(idbarang);
+    const iditems = req.body.items;
+    const { receiver } = req.body;
+    const { amount } = req.body;
+    const nameitemsWithdrawal = await stockItemsQuery.getName(iditems);
+    const input = req.session.user.email;
+    const codeitemsWithdrawal = await stockItemsQuery.getCode(iditems);
 
-    const stock = await stok.getStock(idbarang);
-    const newStock = parseInt(stock, 10) - parseInt(qty, 10);
+    const stockk = await stockItemsQuery.getStock(iditems);
+    const newStock = parseInt(stockk, 10) - parseInt(amount, 10);
 
     if (newStock < 0) {
-      const barangKeluar = await bkeluar.getBarangK();
-      const barang = await stok.getBarang();
-      res.render('barangKeluar', {
+      const itemsWithdrawal = await itemsWithdrawalQuery.getitemsWithdrawal();
+      const items = await stockItemsQuery.getItems();
+      res.render('itemsWithdrawal', {
         us: req.session.user.email,
-        title: 'Barang Keluar',
-        brgk: barangKeluar,
+        title: 'Retirada de Item',
+        itemsw: itemsWithdrawal,
         moment,
-        error: 'Tambah barang keluar gagal: stok barang tidak mencukupi.',
-        brg: barang,
+        error: 'Add retirada de item failed: insufficient stock items.',
+        items: items,
       });
     } else {
-      await stok.updateStock(newStock, idbarang);
-      await bkeluar.addBarangKeluar(
-        idbarang,
-        penerima,
-        qty,
-        namabarangKeluar,
-        penginput,
-        kodebarangKeluar,
+      await stockItemsQuery.updateStock(newStock, iditems);
+      await itemsWithdrawalQuery.additemsWithdrawal(
+        iditems,
+        receiver,
+        amount,
+        nameitemsWithdrawal,
+        input,
+        codeitemsWithdrawal,
       );
 
-      res.redirect('/barangkeluar');
+      res.redirect('/itemsWithdrawal');
     }
   } else {
     res.status(401);
@@ -106,50 +106,49 @@ const addBarangKeluar = async (req, res) => {
   }
 };
 
-const updateBarangKeluar = async (req, res) => {
+const updateitemsWithdrawal = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const { idbarang } = req.body;
-    const { penerima } = req.body;
-    const { qty } = req.body;
-    const { idkeluar } = req.body;
+    const { iditems } = req.body;
+    const { receiver } = req.body;
+    const { amount } = req.body;
+    const { idwithdrawal } = req.body;
 
-    const stockk = await stok.getStock(idbarang);
+    const stockk = await stockItemsQuery.getStock(iditems);
     if (stockk !== 'undefined') {
-      const currentQtyy = await bkeluar.getQty(idkeluar);
+      const currentamounty = await itemsWithdrawalQuery.getAmount(idwithdrawal);
 
-      const qtyy = parseInt(qty, 10);
-      const currentQty = parseInt(currentQtyy, 10);
+      const amounty = parseInt(amount, 10);
+      const currentamount = parseInt(currentamounty, 10);
 
-      if (qtyy > currentQty) {
-        const selisih = qtyy - currentQty;
+      if (amounty > currentamount) {
+        const selisih = amounty - currentamount;
         const kurangin = stockk - selisih;
         if (kurangin < 0) {
-          const barangKeluar = await bkeluar.getBarangK();
-          const barang = await stok.getBarang();
-          res.render('barangKeluar', {
+          const itemsWithdrawal = await itemsWithdrawalQuery.getitemsWithdrawal();
+          const items = await stockItemsQuery.getItems();
+          res.render('itemsWithdrawal', {
             user: req.session.user.email,
-            title: 'Barang Keluar',
-            brgk: barangKeluar,
+            title: 'Retirada de Item',
+            itemsw: itemsWithdrawal,
             moment,
-            error:
-              'Edit barang keluar gagal: menambah jumlah keluar barang ini akan mengakibatkan nilai stok barang menjadi negatif.',
-            brg: barang,
+            error: 'Edit withdrawal items failed: increasing the amount of out items will cause the item stock value to become negative.',
+            items: items,
           });
         } else {
-          await stok.updateStock(kurangin, idbarang);
-          await bkeluar.updateBarangKeluar(penerima, qty, idkeluar);
-          res.redirect('/barangkeluar');
+          await stockItemsQuery.updateStock(kurangin, iditems);
+          await itemsWithdrawalQuery.updateitemsWithdrawal(receiver, amount, idwithdrawal);
+          res.redirect('/itemsWithdrawal');
         }
       } else {
-        const selisih = currentQty - qtyy;
+        const selisih = currentamount - amounty;
         const tambahin = stockk + selisih;
-        await stok.updateStock(tambahin, idbarang);
-        await bkeluar.updateBarangKeluar(penerima, qty, idkeluar);
-        res.redirect('/barangkeluar');
+        await stockItemsQuery.updateStock(tambahin, iditems);
+        await itemsWithdrawalQuery.updateitemsWithdrawal(receiver, amount, idwithdrawal);
+        res.redirect('/itemsWithdrawal');
       }
     } else {
-      await bkeluar.updateBarangKeluar(penerima, qty, idkeluar);
-      res.redirect('/barangkeluar');
+      await itemsWithdrawalQuery.updateitemsWithdrawal(receiver, amount, idwithdrawal);
+      res.redirect('/itemsWithdrawal');
     }
   } else {
     res.status(401);
@@ -157,27 +156,27 @@ const updateBarangKeluar = async (req, res) => {
   }
 };
 
-const deleteBarangKeluar = async (req, res) => {
+const deleteitemsWithdrawal = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const { idbarang } = req.body;
-    const { qty } = req.body;
-    const { idkeluar } = req.body;
+    const { iditems } = req.body;
+    const { amount } = req.body;
+    const { idwithdrawal } = req.body;
 
-    const stockk = await stok.getStock(idbarang);
+    const stockk = await stockItemsQuery.getStock(iditems);
     if (stockk !== 'undefined') {
-      const qtyy = parseInt(qty, 10);
-      const stock = parseInt(stockk, 10);
+      const amounty = parseInt(amount, 10);
+      const stocke = parseInt(stockk, 10);
 
-      const selisih = stock + qtyy;
+      const selisih = stocke + amounty;
 
-      await stok.updateStock(selisih, idbarang);
-      await bkeluar.delBarangKeluar(idkeluar);
+      await stockItemsQuery.updateStock(selisih, iditems);
+      await itemsWithdrawalQuery.delitemsWithdrawal(idwithdrawal);
 
-      res.redirect('/barangkeluar');
+      res.redirect('/itemsWithdrawal');
     } else {
-      await bkeluar.delBarangKeluar(idkeluar);
+      await itemsWithdrawalQuery.delitemsWithdrawal(idwithdrawal);
 
-      res.redirect('/barangkeluar');
+      res.redirect('/itemsWithdrawal');
     }
   } else {
     res.status(401);
@@ -186,8 +185,8 @@ const deleteBarangKeluar = async (req, res) => {
 };
 
 module.exports = {
-  getBarangKeluar,
-  addBarangKeluar,
-  updateBarangKeluar,
-  deleteBarangKeluar,
+  getitemsWithdrawal,
+  additemsWithdrawal,
+  updateitemsWithdrawal,
+  deleteitemsWithdrawal,
 };

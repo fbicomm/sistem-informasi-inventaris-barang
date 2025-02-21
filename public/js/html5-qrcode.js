@@ -19,7 +19,7 @@ function onScanSuccess(decodedText) {
   if (document.getElementById('html5-qrcode-button-camera-stop')) {
     document.getElementById('html5-qrcode-button-camera-stop').click();
   }
-  const $select = $($('#barang'));
+  const $select = $($('#items'));
   select2Search($select, decodedText);
 }
 
@@ -30,7 +30,7 @@ function onScanFailure(error) {
 }
 
 const html5QrcodeScanner = new Html5QrcodeScanner(
-  'reader',
+  'qrcode-reader',
   {
     fps: 10,
     qrbox: { width: 250, height: 250 },

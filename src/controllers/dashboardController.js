@@ -1,33 +1,33 @@
-const user = require('../queries/usersQuery');
-const stok = require('../queries/stockBarangQuery');
-const bmasuk = require('../queries/barangMasukQuery');
-const bkeluar = require('../queries/barangKeluarQuery');
+const usersQuery = require('../queries/usersQuery');
+const stockItemsQuery = require('../queries/stockItemsQuery');
+const itemsIncomingQuery = require('../queries/itemsIncomingQuery');
+const itemsWithdrawalQuery = require('../queries/itemsWithdrawalQuery');
 
 const getIndex = async (req, res) => {
   if (req.session.user && req.session.user.role === 'superadmin') {
-    const totalStock = await stok.totalStock();
-    const totalQtyBM = await bmasuk.totalQty();
-    const totalQtyBK = await bkeluar.totalQty();
-    const totalUsers = await user.totalUsers();
+    const totalStock = await stockItemsQuery.totalStock();
+    const totalamountII = await itemsIncomingQuery.totalAmount();
+    const totalamountIW = await itemsWithdrawalQuery.totalAmount();
+    const totalUsers = await usersQuery.totalUsers();
     res.render('index', {
       user: req.session.user.email,
-      title: 'Dasbor',
+      title: 'Geral',
       totalStock,
-      totalQtyBM,
-      totalQtyBK,
+      totalamountII,
+      totalamountIW,
       totalUsers,
     });
   } else if (req.session.user && req.session.user.role === 'user') {
-    const totalStock = await stok.totalStock();
-    const totalQtyBM = await bmasuk.totalQty();
-    const totalQtyBK = await bkeluar.totalQty();
-    const totalUsers = await user.totalUsers();
+    const totalStock = await stockItemsQuery.totalStock();
+    const totalamountII = await itemsIncomingQuery.totalAmount();
+    const totalamountIW = await itemsWithdrawalQuery.totalAmount();
+    const totalUsers = await usersQuery.totalUsers();
     res.render('index', {
       us: req.session.user.email,
-      title: 'Dasbor',
+      title: 'Geral',
       totalStock,
-      totalQtyBM,
-      totalQtyBK,
+      totalamountII,
+      totalamountIW,
       totalUsers,
     });
   } else {

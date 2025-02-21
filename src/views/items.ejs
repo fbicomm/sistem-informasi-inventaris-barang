@@ -1,14 +1,14 @@
 <%- include('./partials/header') %> 
 <%- include('./partials/nav') %> 
           <div class="col-sm-6">
-            <h1>Stok Barang</h1>
+            <h1>Estoque</h1>
           </div>
           <div class="col-sm-6">
             <div id="bt" class="float-sm-right">
               <div class="dt-buttons btn-group flex-wrap">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add">
-                  <i class="fas fa-plus"></i>
-                  Tambah Barang
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add">
+                  <i class="fa-solid fa-plus"></i>
+                  Adicionar item
                 </button>
               </div>
             </div>
@@ -31,91 +31,87 @@
             <% }) %> 
             <% } %> 
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Tabel Stok Barang</h3>
-              </div>
-              <!-- /.card-header -->
               <div class="card-body">
-                <table id="stokbarang" class="table table-bordered table-striped">
+                <table id="stockItems" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>No</th>
-                      <th>Kode Barang</th>
-                      <th>Gambar</th>
-                      <th>Nama Barang</th>
-                      <th>Deskripsi</th>
-                      <th>Stok</th>
-                      <th>Penginput</th>
-                      <th>Aksi</th>
+                      <th>ID</th>
+                      <th>Código</th>
+                      <th>Imagem</th>
+                      <th>Nome</th>
+                      <th>Descrição</th>
+                      <th>Quantidade</th>
+                      <th>Entrada</th>
+                      <th>Ações</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <% brg.forEach((element, index)=> { %>
+                    <% items.forEach((element, index)=> { %>
                     <tr>
                       <td><%= index+1%></td>
-                      <td><%= element.kodebarang %></td>
+                      <td><%= element.codeitems %></td>
                       <td><img src="/uploads/<%= element.image %>" class="zoomable"></td>
-                      <td><%= element.namabarang %></td>
-                      <td><%= element.deskripsi %></td>
+                      <td><%= element.nameitems %></td>
+                      <td><%= element.description %></td>
                       <td><%= element.stock %></td>
-                      <td><%= element.penginput %></td>
+                      <td><%= element.input %></td>
                       <td>
-                        <a class="btn btn-info btn-sm" href="/barang/<%= element.idbarang %>" role="button"><i class="fas fa-eye"></i></a>
+                        <a class="btn btn-info btn-sm" href="/items/<%= element.iditems %>" role="button"><i class="fa-solid fa-eye"></i></a>
                         <% if(typeof locals.user != 'undefined') { %> 
-                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#edit<%= element.idbarang %>">
-                          <i class="fas fa-edit"></i>
+                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#edit<%= element.iditems %>">
+                          <i class="fa-solid fa-edit"></i>
                         </button>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete<%= element.idbarang %>">
-                          <i class="fas fa-trash-alt"></i>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete<%= element.iditems %>">
+                          <i class="fa-solid fa-trash-alt"></i>
                         </button>
                         <% } %> 
-                        <button type="button" class="btn btn-light btn-sm" data-toggle="modal" data-target="#printqr<%= element.idbarang %>">
-                          <i class='fas fa-qrcode'></i>
+                        <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#printqr<%= element.iditems %>">
+                          <i class='fa-solid fa-qrcode'></i>
                         </button>
                       </td>
                     </tr>
 
                     <!-- Edit Modal -->
-                    <div class="modal fade" id="edit<%= element.idbarang %>">
+                    <div class="modal fade" id="edit<%= element.iditems %>">
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <!-- Modal Header -->
                           <div class="modal-header">
-                            <h4 class="modal-title">Edit Barang</h4>
-                            <button type="button" class="close" onclick="$('#edit<%= element.idbarang %>').modal('hide');">&times;</button>
+                            <h4 class="modal-title">Editar Item</h4>
+                            <button type="button" class="close" onclick="$('#edit<%= element.iditems %>').modal('hide');">&times;</button>
                           </div>
                           <!-- Modal body -->
-                          <form action="/barang/<%= element.idbarang %>?_method=put" method="post" enctype="multipart/form-data">
+                          <form action="/items/update/<%= element.iditems %>?_method=put" method="post" enctype="multipart/form-data">
                             <div class="modal-body">
-                              <input type="hidden" name="oldKode" required value="<%= element.oldKode || element.kodebarang %>"/>
-                              <input type="hidden" name="oldNama" required value="<%= element.oldNama || element.namabarang %>"/>
-                              <input type="hidden" name="idbarang" required value="<%= element.idbarang %>"/>
+                              <input type="hidden" name="oldcode" required value="<%= element.oldcode || element.codeitems %>"/>
+                              <input type="hidden" name="oldNama" required value="<%= element.oldNama || element.nameitems %>"/>
+                              <input type="hidden" name="iditems" required value="<%= element.iditems %>"/>
                               <input type="hidden" name="image" required value="<%= element.image %>"/>
                               <div class="form-group">
-                                <label for="kodebarang">Kode Barang</label>
-                                <input type="text" name="kodebarang" class="form-control" placeholder="Kode Barang" required value="<%= element.kodebarang %>" />
+                                <label for="codeitems">Código</label>
+                                <input type="text" name="codeitems" class="form-control" required value="<%= element.codeitems %>" />
                               </div>
                               <div class="form-group">
-                                <label for="namabarang">Nama Barang</label>
-                                <input type="text" name="namabarang" class="form-control" placeholder="Nama Barang" required value="<%= element.namabarang %>" />
+                                <label for="nameitems">Nome</label>
+                                <input type="text" name="nameitems" class="form-control"  required value="<%= element.nameitems %>" />
                               </div>
                               <div class="form-group">
-                                <label for="deskripsi">Deskripsi</label>
-                                <textarea name="deskripsi" class="form-control" rows="2" placeholder="Deskripsi" required><%= element.deskripsi %></textarea>
+                                <label for="description">Descrição</label>
+                                <textarea name="description" class="form-control" rows="2" required><%= element.description %></textarea>
                               </div>
                               <div class="form-group">
-                                <label for="stock">Stok</label>
-                                <input type="number" name="stock" class="form-control" min="0" placeholder="Stok" required value="<%= element.stock %>" />
+                                <label for="stock">Quantidade</label>
+                                <input type="number" name="stock" class="form-control" min="0" required value="<%= element.stock %>" />
                               </div>
                               <div class="form-group">
-                                <label for="image">Gambar</label>
+                                <label for="image">Imagem</label>
                                 <input type="file" name="image" accept="image/png, image/jpeg" class="form-control-file" />
-                                <small class="form-text text-muted">Maks: 1MB</small>
+                                <small class="form-text text-muted">Máximo: 10MB</small>
                               </div>
                             </div>
                             <div class="modal-footer">
-                              <button type="submit" class="btn btn-primary mb-2">Simpan</button>
-                              <button type="button" class="btn btn-secondary" onclick="$('#edit<%= element.idbarang %>').modal('hide');">Tutup</button>
+                              <button type="submit" class="btn btn-primary mb-2">Salvar</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#edit<%= element.iditems %>').modal('hide');">Cancelar</button>
                             </div>
                           </form>
                         </div>
@@ -123,22 +119,22 @@
                     </div>
                   
                     <!-- Delete Modal -->
-                    <div class="modal fade" id="delete<%= element.idbarang %>">
+                    <div class="modal fade" id="delete<%= element.iditems %>">
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <!-- Modal Header -->
                           <div class="modal-header">
-                            <h4 class="modal-title">Hapus Barang</h4>
-                            <button type="button" class="close" onclick="$('#delete<%= element.idbarang %>').modal('hide');">&times;</button>
+                            <h4 class="modal-title">Deletar Item</h4>
+                            <button type="button" class="close" onclick="$('#delete<%= element.iditems %>').modal('hide');">&times;</button>
                           </div>
                           <!-- Modal body -->
-                          <form action="/barang/delete/<%= element.idbarang %>" method="post">
+                          <form action="/items/delete/<%= element.iditems %>" method="post">
                             <div class="modal-body">
-                              Apakah Anda yakin ingin menghapus barang <%= element.namabarang %>?
+                              Você tem certeza que deseja deletar o item <%= element.nameitems %>?
                             </div>
                             <div class="modal-footer">
-                              <button type="submit" class="btn btn-primary">Ya</button>
-                              <button type="button" class="btn btn-secondary" onclick="$('#delete<%= element.idbarang %>').modal('hide');">Batal</button>
+                              <button type="submit" class="btn btn-danger">Sim</button>
+                              <button type="button" class="btn btn-secondary" onclick="$('#delete<%= element.iditems %>').modal('hide');">Cancelar</button>
                             </div>
                           </form>
                         </div>
@@ -146,40 +142,40 @@
                     </div>
 
                     <!-- Print QR Code Modal -->
-                    <div class="modal fade" id="printqr<%= element.idbarang %>">
+                    <div class="modal fade" id="printqr<%= element.iditems %>">
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <!-- Modal Header -->
                           <div class="modal-header">
-                            <h4 class="modal-title">Print Kode QR</h4>
-                            <button type="button" class="close" onclick="$('#printqr<%= element.idbarang %>').modal('hide');">&times;</button>
+                            <h4 class="modal-title">Imprimir QRCode</h4>
+                            <button type="button" class="close" onclick="$('#printqr<%= element.iditems %>').modal('hide');">&times;</button>
                           </div>
                           <!-- Modal body -->
                           <div class="modal-body">
                             <div class="d-flex justify-content-center">
-                              <b><%= element.kodebarang %> - <%= element.namabarang %></b>
+                              <b><%= element.codeitems %> - <%= element.nameitems %></b>
                             </div>
                             <div class="d-flex justify-content-center mb-3">
-                              <img src="/uploads/<%= element.kodebarang %>.png">
+                              <img src="/uploads/<%= element.codeitems %>.png">
                             </div>
                             <div class="form-group">
-                              <label for="qrSize">Ukuran (lebar x tinggi dalam cm)</label>
+                              <label for="qrSize">Tamanho (largura x altura em cm)</label>
                               <div class="input-group">
-                                <input id="qrWidth<%= element.idbarang %>" type="number" class="form-control" name="qrWidth" placeholder="Lebar (cm)" step="0.01" value="2"  min="0.01" oninput="checkSizeValue(this)" />
+                                <input id="qrWidth<%= element.iditems %>" type="number" class="form-control" name="qrWidth" placeholder="Largura (cm)" step="0.01" value="2"  min="0.01" oninput="checkSizeValue(this)" />
                                 <div class="input-group-prepend input-group-append">
                                   <span class="input-group-text">x</span>
                                 </div>
-                                <input id="qrHeight<%= element.idbarang %>" type="number" class="form-control" name="qrHeight" placeholder="Tinggi (cm)" step="0.01" value="2" min="0.01" oninput="checkSizeValue(this)" />
+                                <input id="qrHeight<%= element.iditems %>" type="number" class="form-control" name="qrHeight" placeholder="Altura (cm)" step="0.01" value="2" min="0.01" oninput="checkSizeValue(this)" />
                               </div>
                             </div>
                             <div class="form-group">
-                              <label for="qrQty">Jumlah</label>
-                              <input id="qrQty<%= element.idbarang %>" type="number" class="form-control" name="qrQty" placeholder="Jumlah" value="1" min="1" oninput="checkQtyValue(this)" />
+                              <label for="qrAmount">Quantidade</label>
+                              <input id="qrAmount<%= element.iditems %>" type="number" class="form-control" name="qrAmount" value="1" min="1" oninput="checkAmountValue(this)" />
                             </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="PrintImage('/uploads/<%= element.kodebarang %>.png','<%= element.idbarang %>', '<%= element.kodebarang %> - <%= element.namabarang %>'); return false;">Print</button>
-                            <button type="button" class="btn btn-secondary" onclick="$('#printqr<%= element.idbarang %>').modal('hide');">Tutup</button>
+                            <button type="button" class="btn btn-primary" onclick="PrintImage('/uploads/<%= element.codeitems %>.png','<%= element.iditems %>', '<%= element.codeitems %> - <%= element.nameitems %>'); return false;">Imprimir</button>
+                            <button type="button" class="btn btn-secondary" onclick="$('#printqr<%= element.iditems %>').modal('hide');">Cancelar</button>
                           </div>
                         </div>
                       </div>
@@ -206,37 +202,37 @@
         <div class="modal-content">
           <!-- Modal Header -->
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Barang</h4>
+            <h4 class="modal-title">Adicionar Item</h4>
             <button type="button" class="close" onclick="$('#add').modal('hide');">&times;</button>
           </div>
           <!-- Modal body -->
-          <form action="/barang" method="post" enctype="multipart/form-data">
+          <form action="/items" method="post" enctype="multipart/form-data">
             <div class="modal-body">
               <div class="form-group">
-                <label for="kodebarang">Kode Barang</label>
-                <input type="text" name="kodebarang" class="form-control" placeholder="Kode Barang" required />
+                <label for="codeitems">Código</label>
+                <input type="text" name="codeitems" class="form-control" required />
               </div>
               <div class="form-group">
-                <label for="namabarang">Nama Barang</label>
-                <input type="text" name="namabarang" class="form-control" placeholder="Nama Barang" required />
+                <label for="nameitems">Nome</label>
+                <input type="text" name="nameitems" class="form-control" required />
               </div>
               <div class="form-group">
-                <label for="deskripsi">Deskripsi</label>
-                <textarea name="deskripsi" class="form-control" rows="2" placeholder="Deskripsi" required></textarea>
+                <label for="description">Descrição</label>
+                <textarea name="description" class="form-control" rows="2" required></textarea>
               </div>
               <div class="form-group">
-                <label for="stock">Stok</label>
-                <input type="number" name="stock" class="form-control" min="1" placeholder="Stok" required />
+                <label for="stock">Quantidade</label>
+                <input type="number" name="stock" class="form-control" min="1" required />
               </div>
               <div class="form-group">
-                <label for="image">Gambar</label>
+                <label for="image">Imagem</label>
                 <input type="file" name="image" accept="image/png, image/jpeg" class="form-control-file" required />
-                <small class="form-text text-muted">Maks: 1MB</small>
+                <small class="form-text text-muted">Máximo: 10MB</small>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Simpan</button>
-              <button type="button" class="btn btn-secondary" onclick="$('#add').modal('hide');">Tutup</button>
+              <button type="submit" class="btn btn-primary">Salvar</button>
+              <button type="button" class="btn btn-secondary" onclick="$('#add').modal('hide');">Cancelar</button>
             </div>
           </form>
         </div>

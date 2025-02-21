@@ -8,11 +8,12 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/fontawesome-free/css/fontawesome.min.css">
+  <link rel="stylesheet" href="/fontawesome-free/css/solid.min.css">
   <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="/admin-lte/css/adminlte.min.css">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box mb-5">
@@ -22,7 +23,7 @@
   <!-- /.login-logo -->
   <div class="card mb-5">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Masuk untuk memulai sesi Anda</p>
+      <p class="login-box-msg">Log in to start your session</p>
       <% if(locals.loginFail){ %> 
       <div class="alert alert-danger alert-dismissible">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -40,19 +41,19 @@
           <input type="email" name="email" class="form-control" placeholder="Email">
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+              <span class="fa-solid fa-envelope"></span>
             </div>
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Kata Sandi">
+          <input type="password" name="password" class="form-control" placeholder="Senha">
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+              <span class="fa-solid fa-lock"></span>
             </div>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+        <button type="submit" class="btn btn-primary btn-block">Access</button>
       </form>
     </div>
     <!-- /.login-card-body -->
@@ -61,10 +62,10 @@
 <!-- /.login-box -->
 
 <!-- jQuery -->
-<script src="/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/jquery/jquery.min.js"></script>
+<!-- Bootstrap 5 -->
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="/dist/js/adminlte.min.js"></script>
+<script src="/admin-lte/js/adminlte.min.js"></script>
 </body>
 </html>

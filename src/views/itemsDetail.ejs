@@ -1,7 +1,7 @@
 <%- include('./partials/header') %> 
 <%- include('./partials/nav') %> 
           <div class="col-sm-6">
-            <h1>Detail Barang</h1>
+            <h1>Detalhes do Item</h1>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -11,53 +11,53 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-header">
-              <h2><%= brg.namabarang %></h2>
-              <img src="/uploads/<%= brg.image %>" class="img-detail">
-              <img src="/uploads/<%= brg.kodebarang %>.png" class="img-detail">
+              <h2><%= items.nameitems %></h2>
+              <img src="/uploads/<%= items.image %>" class="img-detail">
+              <img src="/uploads/<%= items.codeitems %>.png" class="img-detail">
           </div>
           <div class="card-body">
             <div class="row">
-              <div class="col-md-3">Kode Barang</div>
-              <div class="col-md-9">: <%= brg.kodebarang %></div>
+              <div class="col-md-3">Código</div>
+              <div class="col-md-9">: <%= items.codeitems %></div>
             </div>
             <div class="row">
-              <div class="col-md-3">Deskripsi</div>
-              <div class="col-md-9">: <%= brg.deskripsi %></div>
+              <div class="col-md-3">Descrição</div>
+              <div class="col-md-9">: <%= items.description %></div>
             </div>
             <div class="row">
-              <div class="col-md-3">Stok</div>
-              <div class="col-md-9">: <%= brg.stock %></div>
+              <div class="col-md-3">Quantidade</div>
+              <div class="col-md-9">: <%= items.stock %></div>
             </div>
             <div class="row">
-              <div class="col-md-3">Penginput</div>
-              <div class="col-md-9">: <%= brg.penginput %></div>
+              <div class="col-md-3">Entrada</div>
+              <div class="col-md-9">: <%= items.input %></div>
             </div>
 
             <br><br><br>
 
-            <h3>Barang Masuk</h3>
-            <table id="detailbarangmasuk" class="table table-bordered table-striped">
+            <h3>Entrada</h3>
+            <table id="detailItemsIncoming" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>No</th>
-                  <th>Tanggal & Waktu</th>
-                  <th>Kode Barang</th>
-                  <th>Nama Barang</th>
-                  <th>Jumlah</th>
-                  <th>Keterangan</th>
-                  <th>Penginput</th>
+                  <th>ID</th>
+                  <th>Data</th>
+                  <th>Código</th>
+                  <th>Nome</th>
+                  <th>Quantidade</th>
+                  <th>Informação</th>
+                  <th>Entrada</th>
                 </tr>
               </thead>
               <tbody>
-                <% brgm.forEach((element, index)=> { %>
+                <% itemsi.forEach((element, index)=> { %>
                 <tr>
                   <td><%= index+1%></td>
-                  <td><%= moment(element.tanggal).locale('id').format('DD-MM-YYYY HH:mm:ss') %></td>
-                  <td><%= element.kodebarang_m %></td>
-                  <td><%= element.namabarang_m %></td>
-                  <td><%= element.qty %></td>
-                  <td><%= element.keterangan %></td>
-                  <td><%= element.penginput %></td>
+                  <td><%= moment(element.date).locale('id').format('DD-MM-YYYY HH:mm:ss') %></td>
+                  <td><%= element.codeitems_m %></td>
+                  <td><%= element.nameitems_m %></td>
+                  <td><%= element.amount %></td>
+                  <td><%= element.information %></td>
+                  <td><%= element.input %></td>
                 </tr>
                 <% }) %>
               </tbody>
@@ -65,29 +65,29 @@
 
             <br><br>
 
-            <h3>Barang Keluar</h3>
-            <table id="detailbarangkeluar" class="table table-bordered table-striped">
+            <h3>Retirada</h3>
+            <table id="detailItemsWithdrawal" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>No</th>
-                  <th>Tanggal & Waktu</th>
-                  <th>Kode Barang</th>
-                  <th>Nama Barang</th>
-                  <th>Jumlah</th>
-                  <th>Penerima</th>
-                  <th>Penginput</th>
+                  <th>ID</th>
+                  <th>Data</th>
+                  <th>Código</th>
+                  <th>Nome</th>
+                  <th>Quantidade</th>
+                  <th>Recebedor</th>
+                  <th>Entrada</th>
                 </tr>
               </thead>
               <tbody>
-                <% brgk.forEach((element, index)=> { %>
+                <% itemsw.forEach((element, index)=> { %>
                 <tr>
                   <td><%= index+1%></td>
-                  <td><%= moment(element.tanggal).locale('id').format('DD-MM-YYYY HH:mm:ss') %></td>
-                  <td><%= element.kodebarang_k %></td>
-                  <td><%= element.namabarang_k %></td>
-                  <td><%= element.qty %></td>
-                  <td><%= element.penerima %></td>
-                  <td><%= element.penginput %></td>
+                  <td><%= moment(element.date).locale('id').format('DD-MM-YYYY HH:mm:ss') %></td>
+                  <td><%= element.codeitems_k %></td>
+                  <td><%= element.nameitems_k %></td>
+                  <td><%= element.amount %></td>
+                  <td><%= element.receiver %></td>
+                  <td><%= element.input %></td>
                 </tr>
                 <% }) %>
               </tbody>

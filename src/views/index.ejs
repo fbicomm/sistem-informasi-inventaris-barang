@@ -1,7 +1,7 @@
 <%- include('./partials/header') %> 
 <%- include('./partials/nav') %> 
           <div class="col-sm-6">
-            <h1 class="m-0">Dasbor</h1>
+            <h1 class="m-0">Geral</h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -23,12 +23,12 @@
                 <h3>0</h3>
                 <% } %> 
 
-                <p>Stok Barang</p>
+                <p>Estoque</p>
               </div>
               <div class="icon">
-                <i class="fas fa-boxes"></i>
+                <i class="fa-solid fa-boxes"></i>
               </div>
-              <a href="/barang" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="/items" class="small-box-footer">Mais <i class="fa-solid fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -36,18 +36,18 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <% if(totalQtyBM>0) { %> 
-                <h3><%= totalQtyBM %></h3>
+                <% if(totalamountII>0) { %> 
+                <h3><%= totalamountII %></h3>
                 <% }else{ %> 
                 <h3>0</h3>
                 <% } %> 
 
-                <p>Barang Masuk</p>
+                <p>Entrada</p>
               </div>
               <div class="icon">
-                <i class="fas fa-box"></i>
+                <i class="fa-solid fa-box"></i>
               </div>
-              <a href="/barangmasuk" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="/itemsIncoming" class="small-box-footer">Mais <i class="fa-solid fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -55,18 +55,18 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <% if(totalQtyBK>0) { %> 
-                <h3><%= totalQtyBK %></h3>
+                <% if(totalamountIW>0) { %> 
+                <h3><%= totalamountIW %></h3>
                 <% }else{ %> 
                 <h3>0</h3>
                 <% } %> 
 
-                <p>Barang Keluar</p>
+                <p>Retirada</p>
               </div>
               <div class="icon">
-                <i class="fas fa-box-open"></i>
+                <i class="fa-solid fa-box-open"></i>
               </div>
-              <a href="/barangkeluar" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="/itemsWithdrawal" class="small-box-footer">Mais <i class="fa-solid fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -81,12 +81,12 @@
                 <h3>0</h3> 
                 <% } %> 
 
-                <p>Pengguna</p>
+                <p>Usuários</p>
               </div>
               <div class="icon">
-                <i class="fas fa-users"></i>
+                <i class="fa-solid fa-users"></i>
               </div>
-              <a href="/users" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="/users" class="small-box-footer">Mais <i class="fa-solid fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

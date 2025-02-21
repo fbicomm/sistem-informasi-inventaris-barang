@@ -2,12 +2,12 @@ const express = require('express');
 
 const router = express.Router();
 const {
-  getBarangMasuk, addBarangMasuk, updateBarangMasuk, deleteBarangMasuk,
-} = require('../controllers/barangMasukController');
+  getitemsIncoming, additemsIncoming, updateitemsIncoming, deleteitemsIncoming,
+} = require('../controllers/itemsIncomingController');
 
-router.get('/barangmasuk', getBarangMasuk);
-router.post('/barangmasuk', addBarangMasuk);
-router.put('/barangmasuk/:id', updateBarangMasuk);
-router.post('/barangmasuk/delete/:id', deleteBarangMasuk);
+router.get('/itemsIncoming', getitemsIncoming);
+router.post('/itemsIncoming', additemsIncoming);
+router.put('/itemsIncoming/update/:id', updateitemsIncoming);
+router.post('/itemsIncoming/delete/:id', deleteitemsIncoming);
 
 module.exports = router;

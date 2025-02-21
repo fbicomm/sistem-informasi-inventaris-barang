@@ -2,13 +2,13 @@ const express = require('express');
 
 const router = express.Router();
 const {
-  getBarang, getBarangDetail, addBarang, updateBarang, deleteBarang,
-} = require('../controllers/barangController');
+  getItems, getItemsDetail, addItems, updateItems, deleteItems,
+} = require('../controllers/itemsController');
 
-router.get('/barang', getBarang);
-router.get('/barang/:id', getBarangDetail);
-router.post('/barang', addBarang);
-router.put('/barang/:id', updateBarang);
-router.post('/barang/delete/:id', deleteBarang);
+router.get('/items', getItems);
+router.get('/items/:id', getItemsDetail);
+router.post('/items', addItems);
+router.put('/items/update/:id', updateItems);
+router.post('/items/delete/:id', deleteItems);
 
 module.exports = router;
