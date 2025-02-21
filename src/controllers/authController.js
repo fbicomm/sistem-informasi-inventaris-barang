@@ -33,14 +33,14 @@ const login = async (req, res) => {
   } else {
     res.render('login', {
       title: 'Login',
-      loginFail: 'Incorrect email or password.',
+      loginFail: 'E-mail ou senha incorretos.',
     });
   }
 };
 
 const logout = (req, res) => {
   req.session = null;
-  res.render('login', { title: 'Login', logout: 'Logout was successful.' });
+  res.render('login', { title: 'Login', logout: 'O logout foi bem-sucedido.' });
 };
 
 module.exports = {

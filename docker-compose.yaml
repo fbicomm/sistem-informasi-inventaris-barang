@@ -9,13 +9,22 @@ services:
     container_name: postgres
     networks:
       - siib
+    ports:
+      - 5432:5432
     volumes:
       - postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: '1234'
-    ports:
-      - 5432:5432
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '4G'
+    logging:
+      options:
+        max-size: 100M
+        max-file: "1"
     restart: unless-stopped
   app:
     build: 
@@ -29,6 +38,15 @@ services:
       - siib
     ports:
       - "8080:3000"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '4G'
+    logging:
+      options:
+        max-size: 100M
+        max-file: "1"
     working_dir: /app
     restart: unless-stopped
 
