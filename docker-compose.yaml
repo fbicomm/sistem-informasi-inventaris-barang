@@ -1,7 +1,7 @@
 networks:
   siib:
     name: siib
-    enable_ipv6: true
+    enable_ipv6: false
 
 services:
   postgres:
