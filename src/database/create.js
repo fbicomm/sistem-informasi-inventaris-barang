@@ -30,9 +30,7 @@ async function createDb() {
 		});
 		await clientd.connect()
 
-		if (process.env.PGOVERWRITE) {
-			await clientd.query(`DROP SCHEMA IF EXISTS public CASCADE;`);
-		}
+		await clientd.query(`DROP SCHEMA IF EXISTS public CASCADE;`);
 
 		var sql = fs.readFileSync("src/database/db.sql", "utf8");
 		await clientd.query(sql);
